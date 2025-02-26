@@ -1,0 +1,73 @@
+.organization-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.logo-organization {
+    width: 125px;
+    height: 125px;
+    border-radius: 10px;
+    background-size: cover;
+    margin-bottom: 10px;
+    border: 2px solid white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.organization-info {
+    text-align: center;
+}
+
+.status {
+    margin-top: 5px;
+    font-size: 0.9em;
+}
+
+.banned {
+    color: #dc3545;
+}
+
+.organization-actions {
+    margin-top: 10px;
+}
+
+.organization-actions .button {
+    background-color: var(--elements-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 5px;
+}
+
+.organization-actions .button:hover {
+    background-color: var(--elements-hover-color);
+}
+
+.organization-details {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    width: 100%;
+}
+
+.organization-details h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.organization-details ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.about {
+    margin-top: 10px;
+}

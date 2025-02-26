@@ -1,0 +1,47 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+
+{% block title %}{{title}}{% endblock %}
+
+{% block styles %}
+<link type="text/css" rel="stylesheet" href="{% static 'main/css/organization_profile.css' %}"/>
+{% endblock %}
+{% block scripts %}{% endblock %}
+
+{% block content %}
+<div class="organization-header">
+    <div class="logo-organization" style="background-image: url('/media/{{ organization_profile.logo }}');"></div>
+    <div class="organization-info">
+        <h1>{{ organization_profile.name }}</h1>
+        {% if organization_profile.owner__banned %}
+            <span class="status banned">Организация заблокирована</span>
+        {% endif %}
+    </div>
+    <div class="organization-actions">
+        {% if user.is_authenticated and organization_profile.owner__username == user.username %}
+            <a class="button" href="{% url 'services_list' %}?organization_name={{ organization_profile.name }}">Список услуг</a>
+            <a class="button" href="{% url 'organization_branch_list' organization_profile.pk %}">Список филиалов</a>
+            <a class="button" href="{% url 'organization_employee_list' organization_profile.pk %}">Список сотрудников</a>
+            <a class="button" href="{% url 'profile_organization_change' organization_profile.pk %}">Изменить профиль организации</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="organization-details">
+    <h2>Информация об организации</h2>
+    <ul>
+        <li>Владелец: <a href="{% url 'profile_user' organization_profile.owner__username %}">@{{organization_profile.owner__username}}</a></li>
+        <li>ИНН: {{ organization_profile.inn }}</li>
+        {% if organization_profile.site %}
+            <li>Сайт: <a href="{{ organization_profile.site }}" target="_blank">{{ organization_profile.site }}</a></li>
+        {% else %}
+            <li>Сайт: Не указан</a></li>
+        {% endif %}
+    </ul>
+    <div class="about">
+        <h3>О организации:</h3>
+        <p>{{ organization_profile.about|default:"Не указано" }}</p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+
+{% block title %}{{title}}{% endblock %}
+
+{% block styles %}
+<link type="text/css" rel="stylesheet" href="{% static 'main/css/appointment_list.css' %}"/>
+{% endblock %}
+{% block scripts %}{% endblock %}
+
+{% block content %}
+<div class="appointment-list">
+    <h1>Список записей приёма</h1>
+
+    <div class="appointment-items">
+        {% for appointment in appointment_organization_list %}
+        <div class="appointment-item">
+            <p>
+                <strong>Пациент:</strong> <a href="{% url 'profile_user' appointment.who_purchased.username %}">{{ appointment.who_purchased.username }}</a><br>
+                <strong>Услуга:</strong> <a href="{% url 'services_view' appointment.service_now.id %}">{{ appointment.service_now.name_service }}</a><br>
+                <strong>Специалист:</strong> {{ appointment.last_name_specialist }} {{ appointment.first_name_specialist }} {{ appointment.middle_name_specialist }}<br>
+                <strong>Название услуги:</strong> {{ appointment.name_service }}<br>
+                <strong>Дата и время приёма:</strong> {{ appointment.date_time_appointment }}<br>
+                <strong>Цена:</strong> {{ appointment.price_appointment }}<br>
+                <strong>Адрес филиала:</strong> {{ appointment.street_branch }}, {{ appointment.house_branch }}<br>
+                <strong>Квалификация специалиста:</strong> {{ appointment.qualification_specialist }}<br>
+            </p>
+            <hr />
+        </div>
+        {% endfor %}
+    </div>
+    <hr />
+    {% include 'includes/pagination.html' %}
+</div>
+{% endblock %}

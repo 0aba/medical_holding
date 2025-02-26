@@ -1,0 +1,38 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block styles %}
+<link type="text/css" rel="stylesheet" href="{% static 'main/css/organization_employee_list.css' %}"/>
+{% endblock %}
+{% block scripts %}{% endblock %}
+
+{% block content %}
+<div class="organization-employees">
+    <h1>Список сотрудников</h1>
+
+    <a href="{% url 'organization_employee_new' pk_organization %}" class="button add-employee">Добавить сотрудника</a>
+
+    <div class="employee-list">
+        {% for employee in organization_employee_list %}
+        <div class="employee-item">
+            <p>
+                <strong>Имя:</strong> {{ employee.first_name }} {{ employee.middle_name }} {{ employee.last_name }}<br>
+                <strong>Должность:</strong> {{ employee.position }}<br>
+                <strong>Телефон:</strong> {{ employee.phone|default:"Не указан" }}<br>
+                <strong>Номер в мед регистре:</strong> {{ employee.number_in_med_registry }}<br>
+                <strong>Опыт работы (в месяцах):</strong> {{ employee.experience_month }}<br>
+                <strong>Квалификация:</strong> {{ employee.qualification }}<br>
+                <strong>Пол:</strong> {{ employee.gender }}<br>
+            </p>
+            <a href="{% url 'organization_employee_delete' pk_organization employee.pk %}" class="button delete-employee">Удалить сотрудника</a>
+            <a href="{% url 'organization_employee_change' pk_organization employee.pk %}" class="button edit-employee">Изменить сотрудника</a>
+        </div>
+        {% endfor %}
+    </div>
+    <hr />
+    {% include 'includes/pagination.html' %}
+</div>
+
+{% endblock %}

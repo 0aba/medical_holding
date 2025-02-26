@@ -1,0 +1,85 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+
+{% block title %}{{title}}{% endblock %}
+
+{% block styles %}
+<link type="text/css" rel="stylesheet" href="{% static 'main/css/profile_user.css' %}"/>
+<link type="text/css" rel="stylesheet" href="{% static 'main/css/appointment_list.css' %}"/>
+{% endblock %}
+{% block scripts %}{% endblock %}
+
+{% block content %}
+<div class="profile-header" style="background-image: url('/media/{{ user_profile.background }}');">
+    <div class="avatar-profile" style="background-image: url('/media/{{ user_profile.avatar }}');"></div>
+    <div class="profile-info">
+        <h1>{{ user_profile.username }}</h1>
+        {% if user_profile.is_staff %}
+            <span class="status admin">Администратор</span>
+        {% elif user_profile.banned %}
+            <span class="status banned">Заблокирован</span>
+        {% endif %}
+        <span class="status online {% if user_profile.is_online %}online{% else %}offline{% endif %}">
+            {% if user_profile.is_online %}
+                Онлайн
+            {% else %}
+                Офлайн
+                <span class="last-seen">({{ user_profile.last_seen|date:"d M Y H:i" }})</span>
+            {% endif %}
+        </span>
+    </div>
+    <div class="profile-actions">
+        {% if user_profile.username == user.username %}
+            <a class="button" href="{% url 'change_profile_user' user_profile.username %}">Изменить профиль</a>
+        {% endif %}
+        {% if not user_profile.is_staff and user.is_staff %}
+            {% if user_profile.banned %}
+                <a href="{% url 'unban_user' user_profile.username %}" class="button">Разблокировать</a>
+            {% else %}
+                <a href="{% url 'ban_user' user_profile.username %}" class="button">Заблокирован</a>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+<div class="profile-details">
+    <h2>Информация о пользователе</h2>
+    <ul>
+        <li>Имя: {{ user_profile.first_name|default:"Не указан" }}</li>
+        <li>Фамилия: {{ user_profile.last_name|default:"Не указан" }}</li>
+        <li>Пол: {% if user_profile.gender == "M" %} Мужской {% elif user_profile.gender == "F" %}  Женский {% else %}  Не указан  {% endif %}</li>
+        <li>Дата рождения: {{ user_profile.birthday|date:"d M Y"|default:"Не указан" }}</li>
+        <li>Телефон: {{ user_profile.phone|default:"Не указан" }}</li>
+        <li>Дата регистрации: {{ user_profile.date_joined|date:"d M Y"|default:"Не указан" }}</li>
+    </ul>
+    <div class="about">
+        <h3>О себе:</h3>
+        <p>{{ user_profile.about|default:"Не указано" }}</p>
+    </div>
+</div>
+{% if user_profile.username == user.username %}
+<div class="appointment-list">
+    <h1>Список записей приема</h1>
+
+    <div class="appointment-items">
+        {% for appointment in page_obj %}
+        <div class="appointment-item">
+            <p>
+                <strong>Услуга:</strong> <a href="% url 'services_view' appointment.service_now.id %}">{{ appointment.service_now.name_service }}</a><br>
+                <strong>Специалист:</strong> {{ appointment.last_name_specialist }} {{ appointment.first_name_specialist }} {{ appointment.middle_name_specialist }}<br>
+                <strong>Название услуги:</strong> {{ appointment.name_service }}<br>
+                <strong>Дата и время приёма:</strong> {{ appointment.date_time_appointment }}<br>
+                <strong>Цена:</strong> {{ appointment.price_appointment }}<br>
+                <strong>Адрес филиала:</strong> {{ appointment.street_branch }}, {{ appointment.house_branch }}<br>
+                <strong>Квалификация специалиста:</strong> {{ appointment.qualification_specialist }}<br>
+            </p>
+            <hr />
+        </div>
+        {% endfor %}
+    </div>
+    <hr />
+    {% include 'includes/pagination.html' %}
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block styles %}
+<link type="text/css" rel="stylesheet" href="{% static 'main/css/form.css' %}"/>
+{% endblock %}
+
+{% block scripts %}{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2 class="form-title">{{ title_form }}</h2>
+    <form method="post" class="form" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <div class="form-group">
+            <label>Фото</label>
+            {{ form.photo }}
+            {{ form.photo.errors }}
+        </div>
+
+        <div class="form-group">
+            <label>Стаж (в месяцах)</label>
+            {{ form.experience_month }}
+            {{ form.experience_month.errors }}
+        </div>
+
+        <div class="form-group">
+            <label>Имя</label>
+            {{ form.first_name }}
+            {{ form.first_name.errors }}
+        </div>
+
+        <div class="form-group">
+            <label>Фамилия</label>
+            {{ form.last_name }}
+            {{ form.last_name.errors }}
+        </div>
+
+        <div class="form-group">
+            <label>Отчество</label>
+            {{ form.middle_name }}
+            {{ form.middle_name.errors }}
+        </div>
+
+        <div class="form-group">
+            <label>Номер в медицинском регистре</label>
+            {{ form.number_in_med_registry }}
+            {{ form.number_in_med_registry.errors }}
+        </div>
+
+        <div class="form-group">
+            <label>Квалификация</label>
+            {{ form.qualification }}
+            {{ form.qualification.errors }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_gender">Пол</label>
+            <select name="gender" id="id_gender" class="form-control">
+                {% for choice in form.gender.field.choices %}
+                    {% if choice.0 != '' %}
+                        <option value="{{ choice.0 }}" {% if choice.0 == form.gender.value %}selected{% endif %}>{{ choice.1 }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            {{ form.gender.errors }}
+        </div>
+
+        <button type="submit" class="form-button">Сохранить</button>
+    </form>
+</div>
+{% endblock %}

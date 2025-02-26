@@ -1,0 +1,77 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+
+{% block title %}{{title}}{% endblock %}
+
+{% block styles %}
+<link type="text/css" rel="stylesheet" href="{% static 'main/css/form.css' %}"/>
+{% endblock %}
+{% block scripts %}{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2 class="form-title">Изменить профиль</h2>
+    <form method="post" enctype="multipart/form-data" class="form">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="id_avatar">Аватар</label>
+            <input type="file" name="avatar" id="id_avatar" class="form-control">
+            {{ form.avatar.errors }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_background">Фон профиля</label>
+            <input type="file" name="background" id="id_background" class="form-control">
+            {{ form.background.errors }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_about">О себе</label>
+            <textarea name="about" id="id_about" class="form-control"
+                      style="width: 100%; height: 150px; resize: none;" rows="5"
+            >{{ form.about.value }}</textarea>
+            {{ form.about.errors }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_first_name">Имя</label>
+            <input type="text" name="first_name" id="id_first_name" value="{{ form.first_name.value }}" class="form-control">
+            {{ form.first_name.errors }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_last_name">Фамилия</label>
+            <input type="text" name="last_name" id="id_last_name" value="{{ form.last_name.value }}" class="form-control">
+            {{ form.last_name.errors }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_gender">Пол</label>
+            <select name="gender" id="id_gender" class="form-control">
+                {% for choice in form.gender.field.choices %}
+                    {% if choice.0 != '' %}
+                        <option value="{{ choice.0 }}" {% if choice.0 == form.gender.value %}selected{% endif %}>{{ choice.1 }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            {{ form.gender.errors }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_birthday">День рождения</label>
+            <input type="date" name="birthday" id="id_birthday" value="{{ form.birthday.value }}" class="form-control">
+            {{ form.birthday.errors }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_phone">Номер телефона</label>
+            <input type="text" name="phone" id="id_phone" value="{{ form.phone.value }}" class="form-control">
+            {{ form.phone.errors }}
+        </div>
+
+        <button type="submit" class="form-button">Изменить профиль</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block styles %}
+<link type="text/css" rel="stylesheet" href="{% static 'main/css/service_list.css' %}"/>
+{% endblock %}
+{% block scripts %}{% endblock %}
+
+{% block content %}
+<div class="service-organization">
+    {% if user.owner_organization_fk %}
+        <h1>Функции организации</h1>
+        <div class="organization-buttons">
+            <a href="{% url 'appointment_organization' %}" class="button">Приемы моей организации</a>
+            <a href="{% url 'services_new' %}" class="button">Создать услугу</a>
+        </div>
+    {% endif %}
+
+    <div class="filter-section">
+        <h2>Фильтры поиска</h2>
+        <form method="GET" class="filter-form">
+            <label for="organization_name">Название организации</label>
+            <input type="text" name="organization_name" id="organization_name" placeholder="Название организации" value="{{ request.GET.organization_name }}">
+
+            <label for="doctor_name">ФИО врача</label>
+            <input type="text" name="doctor_name" id="doctor_name" placeholder="ФИО врача" value="{{ request.GET.doctor_name }}">
+
+            <label for="price_min">Цена от</label>
+            <input type="number" name="price_min" id="price_min" placeholder="Цена от" value="{{ request.GET.price_min }}" min="0" step="0.01">
+
+            <label for="price_max">Цена до</label>
+            <input type="number" name="price_max" id="price_max" placeholder="Цена до" value="{{ request.GET.price_max }}" min="0" step="0.01">
+
+            <label for="qualification">Квалификация врача</label>
+            <input type="text" name="qualification" id="qualification" placeholder="Квалификация врача" value="{{ request.GET.qualification }}">
+
+            <label for="appointment_start_time">Время начала записи от</label>
+            <input type="time" name="appointment_start_time" id="appointment_start_time" value="{{ request.GET.appointment_start_time }}">
+
+            <label for="appointment_end_time">Время конца записи до</label>
+            <input type="time" name="appointment_end_time" id="appointment_end_time" value="{{ request.GET.appointment_end_time }}">
+
+            <button type="submit" class="button">Применить фильтры</button>
+        </form>
+    </div>
+
+    <div class="service-list">
+        {% for service in service_list %}
+        <div class="service-item">
+            <p>
+                <strong>Название услуги:</strong> {{ service.name_service }}<br>
+                <strong>Название организации:</strong> <a href="{% url 'profile_organization' service.branch.organization.id %}">{{ service.branch.organization.name }}</a><br>
+                <strong>Цена:</strong> {{ service.price }}<br>
+                <strong>Время начала приема:</strong> {{ service.appointment_start_time }}<br>
+                <strong>Время конца приема:</strong> {{ service.appointment_end_time }}<br>
+                <strong>Адрес приема:</strong> ул. {{ service.branch.street  }} дом {{ house }}<br>
+                <strong>Длительность приема:</strong> {{ service.appointment_interval }} минут<br>
+                <strong>На сколько вперед дней можно оформить:</strong> {{ service.amount_days_for_registration }} дней<br>
+            </p>
+            <a href="{% url 'services_view' service.id %}" class="button view-service">Посмотреть услугу</a>
+        </div>
+        {% endfor %}
+    </div>
+    <hr />
+    {% include 'includes/pagination.html' %}
+</div>
+{% endblock %}

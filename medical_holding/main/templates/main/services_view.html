@@ -1,0 +1,152 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+
+{% block title %}{{title}}{% endblock %}
+
+{% block styles %}
+<link type="text/css" rel="stylesheet" href="{% static 'main/css/form.css' %}"/>
+<link type="text/css" rel="stylesheet" href="{% static 'main/css/services_view.css' %}"/>
+<link type="text/css" rel="stylesheet" href="{% static 'main/css/comment.css' %}"/>
+{% endblock %}
+{% block scripts %}{% endblock %}
+
+{% block content %}
+<div class="service-details">
+    <h2>Информация об услуге</h2>
+    <ul>
+        <li>Организация: <a href="{% url 'profile_organization' services_view.branch.organization.id %}">{{ services_view.branch.organization.name }}</a></li>
+        <li>Название услуги: {{ services_view.name_service }}</li>
+        <li>Цена: {{ services_view.price }}</li>
+        <li>Филиал: {{ services_view.branch }}</li>
+        <li>Время начала записи: {{ services_view.appointment_start_time|time:"H:i" }}</li>
+        <li>Время окончания записи: {{ services_view.appointment_end_time|time:"H:i" }}</li>
+    </ul>
+
+    {% if services_view.branch.organization.owner == request.user %}
+        <a class="button" href="{% url 'service_delete' services_view.id %}">Удалить</a>
+        <a class="button" href="{% url 'services_change' services_view.id %}">Изменить</a>
+    {% endif %}
+</div>
+
+<div class="form-container">
+    <h2 class="form-title">{{ title }}</h2>
+    <form method="post" class="form">
+        {% csrf_token %}
+        <input name="formId" value="employee_date_form" type="hidden"/>
+
+        {{ employee_date_form.non_field_errors }}
+        <div class="form-group">
+            <label>{{ employee_date_form.employee.label }}</label>
+            {{ employee_date_form.employee }}
+            {{ employee_date_form.employee.errors }}
+        </div>
+        <div class="form-group">
+            <label>{{ employee_date_form.appointment_date.label }}</label>
+            {{ employee_date_form.appointment_date }}
+            {{ employee_date_form.appointment_date.errors }}
+        </div>
+        <button type="submit" class="form-button">Поиск времени</button>
+    </form>
+
+{% if appointment_time_form %}
+    <hr/>
+    <h2 class="form-title">Выберите время</h2>
+    <form method="post" class="form">
+        {% csrf_token %}
+        <input name="formId" value="appointment_time_form" type="hidden"/>
+
+        <input type="hidden" name="employee" value="{{ employee_date_form.employee.value }}" />
+        <input type="hidden" name="appointment_date" value="{{ employee_date_form.appointment_date.value }}" />
+
+        {{ appointment_time_form.non_field_errors }}
+        <div class="form-group">
+            <label>{{ appointment_time_form.appointment_time.label }}</label>
+            {{ appointment_time_form.appointment_time }}
+            {{ appointment_time_form.appointment_time.errors }}
+        </div>
+        <button type="submit" class="form-button">Оформить прием</button>
+    </form>
+</div>
+{% endif %}
+<div class="form-container">
+    <h2 class="form-title">Общая оценка: {{ common_rating|floatformat:2|default:"Нет" }}</h2>
+    {% if user.is_authenticated %}
+    <form method="post" class="form">
+        {% csrf_token %}
+        <input name="formId" value="rating_service_form" type="hidden"/>
+
+        {{ rating_service_form.non_field_errors }}
+
+        <div class="form-group">
+            <label>{{ rating_service_form.grade.label }}</label>
+            {{ rating_service_form.grade }}
+            {{ rating_service_form.grade.errors }}
+        </div>
+
+        {% if user_rating %}
+            <a href="{% url 'delete_rating' services_view.id user_rating.id %}" class="button" style="text-align: center">Удалить оценку</a>
+            <button type="submit" class="form-button">Изменить оценку</button>
+        {% else %}
+            <button type="submit" class="form-button">Оценка</button>
+        {% endif %}
+    </form>
+    {% else %}
+    <h2>Войдите, чтобы поставить оценку</h2>
+    {% endif %}
+</div>
+
+<div class="comment-list">
+    <h1>Список комментариев</h1>
+
+    <div class="comment-items">
+        {% for comment in page_obj %}
+        <div class="comment-item">
+            <p>
+                <strong>Никнейм:</strong> <a href="{% url 'profile_user' comment.wrote.username %}">{{ comment.wrote.username }}</a>
+                {% if comment.wrote.is_staff %}
+                <span class="admin-badge">(Администратор)</span>
+                {% endif %}
+                {% if comment.is_change %}
+                <span class="change-badge">(Изменен)</span>
+                {% endif %}
+                <br>
+                <strong>Комментарий:</strong> {{ comment.text }}<br>
+                <br>
+                {% if request.user == comment.wrote or request.user.is_staff %}
+                <a class="button comment-delete" href="{% url 'delete_comment' comment.id %}">Удалить</a>
+                {% endif %}
+
+                {% if request.user == comment.wrote %}
+                <a class="button comment-edit" href="{% url 'change_comment' comment.id %}">Изменить</a>
+                {% endif %}
+            </p>
+            <hr />
+        </div>
+        {% endfor %}
+    </div>
+    <hr />
+    {% include 'includes/pagination.html' %}
+</div>
+
+{% if user.is_authenticated %}
+<div class="form-container">
+    <h2 class="form-title">Добавить комментарий</h2>
+    <form method="post" enctype="multipart/form-data" class="form">
+        {% csrf_token %}
+        <input name="formId" value="comment_create_form" type="hidden"/>
+        <div class="form-group">
+            <label for="id_text">Комментарий</label>
+            <textarea name="text" id="id_text" class="form-control"
+                      style="width: 100%; height: 150px; resize: none;" rows="5"
+            >{{ comment_about_service_form.text.value|default:"" }}</textarea>
+            {{ comment_about_service_form.text.errors }}
+        </div>
+        <button type="submit" class="form-button">Добавить комментарий</button>
+    </form>
+</div>
+{% else %}
+<h2>Войдите, чтобы оставить комментарий</h2>
+{% endif %}
+
+{% endblock %}

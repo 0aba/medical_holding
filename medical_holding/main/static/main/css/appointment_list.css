@@ -1,0 +1,30 @@
+.appointment-list {
+    width: 100%;
+    margin: 5px 5px 5px 5px;
+    padding: 20px;
+    background: var(--background-color-list-items);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.appointment-items {
+    margin-top: 20px;
+}
+
+.appointment-item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.appointment-item:last-child {
+    border-bottom: none;
+}
+
+a {
+    color: var(--elements-color);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}

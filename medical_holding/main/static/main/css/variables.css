@@ -1,0 +1,10 @@
+:root {
+    --background-color: rgb(227, 224, 224);
+    --background-color-list-items: rgba(255, 255, 255, 0.3);
+    --main-color: rgba(0, 128, 113, 0.7);
+    --elements-color: rgba(0, 128, 128, 0.7);
+    --elements-hover-color: rgba(0, 128, 60, 0.7);
+    --lnk-color: rgb(209, 255, 230);
+    --lnk-hover-color: rgb(0, 204, 102);
+    --color-text-form: rgb(28, 255, 153);
+}

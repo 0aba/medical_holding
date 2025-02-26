@@ -1,0 +1,81 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+
+{% block title %}{{title}}{% endblock %}
+
+{% block styles %}
+<link type="text/css" rel="stylesheet" href="{% static 'main/css/form.css' %}"/>
+{% endblock %}
+
+{% block scripts %}{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2 class="form-title">{{ title_form }}</h2>
+    <form method="post" class="form">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <div class="form-group">
+            <label>Название услуги</label>
+            {{ form.name_service }}
+            {{ form.name_service.errors }}
+        </div>
+
+        <div class="form-group">
+            <label>Цена</label>
+            {{ form.price }}
+            {{ form.price.errors }}
+        </div>
+
+        <div class="form-group">
+            <label>Где будет проходить</label>
+            {{ form.branch }}
+            {{ form.branch.errors }}
+        </div>
+
+        <div class="form-group">
+            <label>Время начала приемов</label>
+            {{ form.appointment_start_time }}
+            {{ form.appointment_start_time.errors }}
+        </div>
+
+        <div class="form-group">
+            <label>Время конца приемов</label>
+            {{ form.appointment_end_time }}
+            {{ form.appointment_end_time.errors }}
+        </div>
+
+        <div class="form-group">
+            <label>Интервал записей</label>
+            {{ form.appointment_interval }}
+            {{ form.appointment_interval.errors }}
+        </div>
+
+        <div class="form-group">
+            <label>На сколько вперед дней можно оформить</label>
+            {{ form.amount_days_for_registration }}
+            {{ form.amount_days_for_registration.errors }}
+        </div>
+
+        <div class="form-group">
+            <label>Сотрудники, которые могут выполнять услугу</label>
+            {% if form.employee.field.queryset.count > 0 %}
+                {{ form.employee }}
+                {{ form.employee.errors }}
+            {% else %}
+                <ul class="errorlist"><li>У вас нет сотрудников!</li></ul>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label>Дополнительная информация</label>
+            {{ form.additional_information }}
+            {{ form.additional_information.errors }}
+        </div>
+
+        <button type="submit" class="form-button">Сохранить</button>
+    </form>
+</div>
+{% endblock %}

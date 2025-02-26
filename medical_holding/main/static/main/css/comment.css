@@ -1,0 +1,77 @@
+.comment-list {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    background: var(--background-color-list-items);
+    border-radius: 5px;
+}
+
+.comment-items {
+    margin-bottom: 20px;
+}
+
+.comment-item {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.comment-item:last-child {
+    border-bottom: none;
+}
+
+.admin-badge {
+    color: red;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+.change-badge {
+    color: gray;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+.button {
+    background-color: var(--main-color);
+    color: white;
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 3px;
+    margin-right: 5px;
+}
+
+.button:hover {
+    background-color: var(--elements-hover-color);
+}
+
+.form-container {
+    margin-top: 20px;
+}
+
+.form-title {
+    margin-bottom: 15px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-button {
+    background-color: var(--main-color);
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.form-button:hover {
+    background-color: var(--elements-hover-color);
+}

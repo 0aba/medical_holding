@@ -1,0 +1,18 @@
+.service-details {
+    background-color: var(--background-color-list-items);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    width: 100%;
+}
+
+.service-details h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.service-details ul {
+    list-style-type: none;
+    padding: 0;
+}

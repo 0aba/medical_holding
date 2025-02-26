@@ -1,0 +1,65 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}{% endblock %}</title>
+    <link type="text/css" rel="stylesheet" href="{% static 'main/css/main.css' %}"/>
+    {% block styles %}{% endblock %}
+    {% block scripts %}{% endblock %}
+</head>
+<body>
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                {% include 'includes/notification.html' with message=message message_type='error' display_time=5 %}
+            {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+                {% include 'includes/notification.html' with message=message message_type='warning' display_time=5 %}
+            {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+                {% include 'includes/notification.html' with message=message message_type='info' display_time=5 %}
+            {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                {% include 'includes/notification.html' with message=message message_type='success' display_time=5 %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <img src="{% static 'main/img/empty_logo.jpg' %}" alt="Logo" />
+            </div>
+            <nav class="nav-links">
+                <a href="{% url 'home' %}" class="button">Главная</a>
+                <a href="{% url 'services_list' %}" class="button">Услуги</a>
+                <a href="{% url 'router_organization' %}" class="button">Организациям</a>
+            </nav>
+            <div class="auth-links">
+                {% if user.is_authenticated %}
+                    <div class="profile">
+                        <a class="a-profile" href="{% url 'profile_user' user.username %}">
+                            <img class="avatar" src="/media/{{ user.avatar }}" alt="Аватар" />
+                            <p>Профиль</p>
+                        </a>
+                    </div>
+                    <a class="button" href="{% url 'log_out' %}">Выйти</a>
+                {% else %}
+                    <a href="{% url 'sign_up' %}" class="button">Регистрация</a>
+                    <a href="{% url 'log_in' %}" class="button">Вход</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+    <div id="wrapper">
+        <div id="content">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+    <footer>
+        <div class="footer-content">
+            <p>©«Медицинский холдинг» 2025</p>
+        </div>
+    </footer>
+</body>
+</html>

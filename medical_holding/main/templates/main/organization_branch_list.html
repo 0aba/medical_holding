@@ -1,0 +1,33 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block styles %}
+<link type="text/css" rel="stylesheet" href="{% static 'main/css/organization_branch_list.css' %}"/>
+{% endblock %}
+{% block scripts %}{% endblock %}
+
+{% block content %}
+<div class="organization-branches">
+    <h1>Список филиалов</h1>
+
+    <a href="{% url 'organization_branch_new' pk_organization %}" class="button add-branch">Добавить филиал</a>
+
+    <div class="branch-list">
+        {% for branch in organization_branch_list %}
+        <div class="branch-item">
+            <p>
+                <strong>Улица:</strong> {{ branch.street }}<br>
+                <strong>Дом:</strong> {{ branch.house }}<br>
+                <strong>Телефон:</strong> {{ branch.phone|default:"Не указан" }}<br>
+            </p>
+            <a href="{% url 'organization_branch_delete' pk_organization branch.pk %}" class="button delete-branch">Удалить филиал</a>
+            <a href="{% url 'organization_branch_change' pk_organization branch.pk %}" class="button edit-branch">Изменить филиал</a>
+        </div>
+        {% endfor %}
+    </div>
+    <hr />
+    {% include 'includes/pagination.html' %}
+</div>
+{% endblock %}

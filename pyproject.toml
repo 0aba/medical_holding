@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=75.1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "medical_holding"
+version = "0.0.0.1"
+description = "A site for finding suitable medical services among those offered by medical institutions."
+requires-python = ">=3.13"
+
+dependencies = [
+  "Django == 5.1.6",
+  "Pillow == 11.1.0",
+  "python-dotenv == 1.0.1",
+  "psycopg[binary,pool] == 3.2.4",
+]
+
+[tool.setuptools]
+py-modules = []
+
+[tool.distutils.egg_info]
+egg_base = "."
