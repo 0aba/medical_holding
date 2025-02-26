@@ -656,6 +656,7 @@ class ServicesListView(ListView):
     def get_queryset(self):
         queryset = ServiceOrganization.non_deleted.filter()
 
+        service_name = self.request.GET.get('service_name')
         organization_name = self.request.GET.get('organization_name')
         doctor_name = self.request.GET.get('doctor_name')
         price_min = self.request.GET.get('price_min')
@@ -663,6 +664,9 @@ class ServicesListView(ListView):
         qualification = self.request.GET.get('qualification')
         appointment_start_time = self.request.GET.get('appointment_start_time')
         appointment_end_time = self.request.GET.get('appointment_end_time')
+
+        if service_name:
+            queryset = queryset.filter(name_service__icontains=service_name)
 
         if organization_name:
             queryset = queryset.filter(branch__organization__name__icontains=organization_name)

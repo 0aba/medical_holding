@@ -21,6 +21,9 @@
     <div class="filter-section">
         <h2>Фильтры поиска</h2>
         <form method="GET" class="filter-form">
+            <label for="service_name">Название услуги</label>
+            <input type="text" name="service_name" id="service_name" placeholder="Название услуги" value="{{ request.GET.service_name }}">
+
             <label for="organization_name">Название организации</label>
             <input type="text" name="organization_name" id="organization_name" placeholder="Название организации" value="{{ request.GET.organization_name }}">
 
