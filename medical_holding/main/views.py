@@ -841,8 +841,16 @@ class ServicesView(View):
             date_time_appointment = datetime.strptime(date_time_str, '%Y-%m-%d %H:%M:%S')
 
             who_purchased = self.request.user
-
+            branch = service.branch
             who_provides = EmployeeOrganization.objects.get(id=employee)
+
+            if who_provides.deleted:
+                messages.error(self.request, 'Этот сотрудник больше не работает')
+                return redirect('services_view', self.kwargs.get('pk'), permanent=False)
+
+            if branch.deleted:
+                messages.error(self.request, 'Филиала, где оказывались приемы больше не существует')
+                return redirect('services_view', self.kwargs.get('pk'), permanent=False)
 
             try:
                 AppointmentDoctor.objects.create(
@@ -856,8 +864,8 @@ class ServicesView(View):
                     last_name_specialist=who_provides.last_name,
                     middle_name_specialist=who_provides.middle_name,
                     qualification_specialist=who_provides.qualification,
-                    street_branch=service.branch.street,
-                    house_branch=service.branch.house,
+                    street_branch=branch.street,
+                    house_branch=branch.house,
                 )
             except IntegrityError:
                 messages.error(self.request, 'Произошла ошибка при записи на прием, возможно это время уже занято')
