@@ -26,11 +26,10 @@
                 <strong>Адрес филиала:</strong> {{ appointment.street_branch }}, {{ appointment.house_branch }}<br>
                 <strong>Квалификация специалиста:</strong> {{ appointment.qualification_specialist }}<br>
             </p>
-            <hr />
         </div>
         {% endfor %}
     </div>
-    <hr />
+    <br>
     {% include 'includes/pagination.html' %}
 </div>
 {% endblock %}

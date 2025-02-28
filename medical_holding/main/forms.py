@@ -22,6 +22,7 @@ class MyUserCreationForm(UserCreationForm):
         min_length=3,
         max_length=150,
         required=True,
+        label='Логин'
     )
 
 

@@ -69,10 +69,7 @@ class ProfileUserView(DetailView):
 
     def get_object(self, queryset=None):
         try:
-            object_user = (User.objects
-                           .values('username', 'avatar', 'background', 'about', 'first_name', 'last_name', 'gender',
-                                   'birthday', 'phone', 'last_seen', 'is_online', 'banned', 'date_joined', 'is_staff'
-                           ).get(username=self.kwargs.get('username')))
+            object_user = User.objects.get(username=self.kwargs.get('username'))
         except ObjectDoesNotExist:
             messages.error(self.request, 'Пользователь не найден')
             return redirect('home', permanent=False)
@@ -276,7 +273,7 @@ class ChangeProfileOrganizationView(UpdateView):
     def get_context_data(self, **kwargs):
         base_context = super().get_context_data(**kwargs)
         context = {
-            'title': 'Изменить свой профиль',
+            'title': 'Изменить профиль организации',
         }
 
         return {**base_context, **context}
@@ -471,6 +468,7 @@ def delete_organization_branch(request, pk, pk_branch):
     branch_organization.deleted = True
     branch_organization.save()
 
+    messages.success(request, 'Филиал был удален')
     return redirect('organization_branch_list', pk, permanent=True)
 
 
@@ -630,12 +628,13 @@ def delete_organization_employee(request, pk, pk_employee):
         return redirect('home', permanent=False)
 
     if employee_organization.deleted:
-        messages.error(request, 'Сотрудник был удален')
+        messages.error(request, 'Сотрудник был удален ранее')
         return redirect('home', permanent=True)
 
     employee_organization.deleted = True
     employee_organization.save()
-
+    
+    messages.success(request, 'Сотрудник был удален')
     return redirect('organization_employee_list', pk, permanent=True)
 
 
@@ -1052,12 +1051,13 @@ def delete_organization_service(request, pk):
         return redirect('home', permanent=False)
 
     if service_organization.deleted:
-        messages.error(request, 'Услуга была удалена')
+        messages.error(request, 'Услуга уже была удалена ранее')
         return redirect('home', permanent=True)
 
     service_organization.deleted = True
     service_organization.save()
-
+    
+    messages.success(request, 'Услуга была удалена')
     return redirect('services_list', permanent=True)
 
 
